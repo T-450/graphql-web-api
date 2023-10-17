@@ -5,16 +5,13 @@ namespace ConferencePlanner.GraphQL.Speakers
 {
     public class UploadSpeakerPhotoPayload : SpeakerPayloadBase
     {
-        public UploadSpeakerPhotoPayload(Speaker speaker) 
-            : base(speaker)
-        {
-        }
+        public UploadSpeakerPhotoPayload(Speaker speaker)
+            : base(speaker) { }
 
-        public UploadSpeakerPhotoPayload(UserError error) 
-            : base(new[] { error })
-        {
-        }
-
-        
+        public UploadSpeakerPhotoPayload(UserError error)
+            : base(new[]
+            {
+                error,
+            }) { }
     }
 }

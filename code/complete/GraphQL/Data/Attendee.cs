@@ -21,7 +21,7 @@ namespace ConferencePlanner.GraphQL.Data
 
         [StringLength(256)]
         public string? EmailAddress { get; set; }
-        
+
         [StringLength(256)]
         public string? Country { get; set; }
 

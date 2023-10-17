@@ -18,11 +18,8 @@ namespace ConferencePlanner.GraphQL.DataLoader
             IDbContextFactory<ApplicationDbContext> dbContextFactory,
             IBatchScheduler batchScheduler,
             DataLoaderOptions options)
-            : base(batchScheduler, options)
-        {
-            _dbContextFactory = dbContextFactory ??
-                throw new ArgumentNullException(nameof(dbContextFactory));
-        }
+            : base(batchScheduler, options) => _dbContextFactory = dbContextFactory ??
+            throw new ArgumentNullException(nameof(dbContextFactory));
 
         protected override async Task<ILookup<int, Speaker>> LoadGroupedBatchAsync(
             IReadOnlyList<int> keys,

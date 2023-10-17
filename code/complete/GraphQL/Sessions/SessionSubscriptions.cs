@@ -15,7 +15,6 @@ namespace ConferencePlanner.GraphQL.Sessions
         public Task<Session> OnSessionScheduledAsync(
             [EventMessage] int sessionId,
             SessionByIdDataLoader sessionById,
-            CancellationToken cancellationToken) =>
-            sessionById.LoadAsync(sessionId, cancellationToken);
+            CancellationToken cancellationToken) => sessionById.LoadAsync(sessionId, cancellationToken);
     }
 }

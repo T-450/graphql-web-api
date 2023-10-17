@@ -15,7 +15,10 @@ namespace ConferencePlanner.GraphQL.Tracks
             [ScopedService] ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
-            var track = new Track { Name = input.Name };
+            Track track = new Track
+            {
+                Name = input.Name,
+            };
             context.Tracks.Add(track);
 
             await context.SaveChangesAsync(cancellationToken);
@@ -29,13 +32,13 @@ namespace ConferencePlanner.GraphQL.Tracks
             [ScopedService] ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
-            var track = await context.Tracks.FindAsync(input.Id, cancellationToken);
+            Track? track = await context.Tracks.FindAsync(input.Id, cancellationToken);
 
             if (track is null)
             {
                 throw new GraphQLException("Track not found.");
             }
-            
+
             track.Name = input.Name;
 
             await context.SaveChangesAsync(cancellationToken);

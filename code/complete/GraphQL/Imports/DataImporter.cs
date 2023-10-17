@@ -12,24 +12,24 @@ namespace ConferencePlanner.GraphQL.Imports
     {
         public async Task LoadDataAsync(ApplicationDbContext db)
         {
-            await using var stream = File.OpenRead("Imports/NDC_London_2019.json");
-            using var reader = new JsonTextReader(new StreamReader(stream));
+            await using FileStream stream = File.OpenRead("Imports/NDC_London_2019.json");
+            using JsonTextReader reader = new JsonTextReader(new StreamReader(stream));
 
             JArray conference = await JArray.LoadAsync(reader);
-            var speakers = new Dictionary<string, Speaker>();
+            Dictionary<string, Speaker> speakers = new Dictionary<string, Speaker>();
 
-            foreach (var conferenceDay in conference)
+            foreach (JToken conferenceDay in conference)
             {
-                foreach (var roomData in conferenceDay["rooms"]!)
+                foreach (JToken roomData in conferenceDay["rooms"]!)
                 {
-                    var track = new Track
+                    Track track = new Track
                     {
-                        Name = roomData["name"]!.ToString()
+                        Name = roomData["name"]!.ToString(),
                     };
 
-                    foreach (var sessionData in roomData["sessions"]!)
+                    foreach (JToken sessionData in roomData["sessions"]!)
                     {
-                        var session = new Session
+                        Session session = new Session
                         {
                             Title = sessionData["title"]!.ToString(),
                             Abstract = sessionData["description"]!.ToString(),
@@ -39,15 +39,15 @@ namespace ConferencePlanner.GraphQL.Imports
 
                         track.Sessions.Add(session);
 
-                        foreach (var speakerData in sessionData["speakers"]!)
+                        foreach (JToken speakerData in sessionData["speakers"]!)
                         {
                             string id = speakerData["id"]!.ToString();
 
                             if (!speakers.TryGetValue(id, out Speaker? speaker))
                             {
                                 speaker = new Speaker
-                                { 
-                                    Name = speakerData["name"]!.ToString()
+                                {
+                                    Name = speakerData["name"]!.ToString(),
                                 };
 
                                 speakers.Add(id, speaker);
@@ -56,8 +56,7 @@ namespace ConferencePlanner.GraphQL.Imports
 
                             session.SessionSpeakers.Add(new SessionSpeaker
                             {
-                                Speaker = speaker,
-                                Session = session
+                                Speaker = speaker, Session = session,
                             });
                         }
                     }

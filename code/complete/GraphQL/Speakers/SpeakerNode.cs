@@ -20,7 +20,7 @@ namespace ConferencePlanner.GraphQL.Speakers
         [BindMember(nameof(Speaker.Bio), Replace = true)]
         public string? GetBio([Parent] Speaker speaker, bool error = false)
         {
-            if(error) 
+            if (error)
             {
                 throw new GraphQLException("Some error with the bio.");
             }
@@ -32,15 +32,13 @@ namespace ConferencePlanner.GraphQL.Speakers
         public async Task<IEnumerable<Session>> GetSessionsAsync(
             [Parent] Speaker speaker,
             SessionBySpeakerIdDataLoader sessionBySpeakerId,
-            CancellationToken cancellationToken)
-            => await sessionBySpeakerId.LoadAsync(speaker.Id, cancellationToken);
+            CancellationToken cancellationToken) => await sessionBySpeakerId.LoadAsync(speaker.Id, cancellationToken);
 
         [NodeResolver]
         public static Task<Speaker> GetSpeakerByIdAsync(
             int id,
             SpeakerByIdDataLoader speakerById,
-            CancellationToken cancellationToken)
-            => speakerById.LoadAsync(id, cancellationToken);
+            CancellationToken cancellationToken) => speakerById.LoadAsync(id, cancellationToken);
 
         public async Task<IEnumerable<Session>> GetSessionsExpensiveAsync(
             [Parent] Speaker speaker,
@@ -57,19 +55,19 @@ namespace ConferencePlanner.GraphQL.Speakers
             [Service] IDbContextFactory<ApplicationDbContext> contextFactory,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var random = new Random();
+            Random random = new Random();
 
             await Task.Delay(random.Next(500, 1000), cancellationToken);
 
-            await using var context = contextFactory.CreateDbContext();
+            await using ApplicationDbContext context = contextFactory.CreateDbContext();
 
-            var stream = (IAsyncEnumerable<SessionSpeaker>)context.Speakers
+            IAsyncEnumerable<SessionSpeaker> stream = (IAsyncEnumerable<SessionSpeaker>)context.Speakers
                 .Where(s => s.Id == speaker.Id)
                 .Include(s => s.SessionSpeakers)
                 .SelectMany(s => s.SessionSpeakers)
                 .Include(s => s.Session);
 
-            await foreach (var item in stream.WithCancellation(cancellationToken))
+            await foreach (SessionSpeaker item in stream.WithCancellation(cancellationToken))
             {
                 if (item.Session is not null)
                 {

@@ -2,25 +2,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using ConferencePlanner.GraphQL.Common;
 using ConferencePlanner.GraphQL.Data;
 using ConferencePlanner.GraphQL.DataLoader;
 using HotChocolate;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConferencePlanner.GraphQL.Sessions
 {
     public class ScheduleSessionPayload : SessionPayloadBase
     {
         public ScheduleSessionPayload(Session session)
-            : base(session)
-        {
-        }
+            : base(session) { }
 
         public ScheduleSessionPayload(UserError error)
-            : base(new[] { error })
-        {
-        }
+            : base(new[]
+            {
+                error,
+            }) { }
 
         public async Task<Track?> GetTrackAsync(
             TrackByIdDataLoader trackById,

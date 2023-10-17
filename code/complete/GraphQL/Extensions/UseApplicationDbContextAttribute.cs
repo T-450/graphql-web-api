@@ -5,8 +5,6 @@ namespace ConferencePlanner.GraphQL
 {
     public class UseApplicationDbContextAttribute : UseDbContextAttribute
     {
-        public UseApplicationDbContextAttribute() : base(typeof(ApplicationDbContext))
-        {
-        }
+        public UseApplicationDbContextAttribute() : base(typeof(ApplicationDbContext)) { }
     }
 }

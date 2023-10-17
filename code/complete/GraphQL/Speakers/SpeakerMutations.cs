@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ConferencePlanner.GraphQL.Common;
@@ -17,11 +16,9 @@ namespace ConferencePlanner.GraphQL.Speakers
             [ScopedService] ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
-            var speaker = new Speaker
+            Speaker speaker = new Speaker
             {
-                Name = input.Name,
-                Bio = input.Bio,
-                WebSite = input.WebSite
+                Name = input.Name, Bio = input.Bio, WebSite = input.WebSite,
             };
 
             context.Speakers.Add(speaker);

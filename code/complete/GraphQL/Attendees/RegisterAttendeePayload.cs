@@ -6,13 +6,12 @@ namespace ConferencePlanner.GraphQL.Attendees
     public class RegisterAttendeePayload : AttendeePayloadBase
     {
         public RegisterAttendeePayload(Attendee attendee)
-            : base(attendee)
-        {
-        }
+            : base(attendee) { }
 
         public RegisterAttendeePayload(UserError error)
-            : base(new[] { error })
-        {
-        }
+            : base(new[]
+            {
+                error,
+            }) { }
     }
 }

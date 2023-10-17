@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using ConferencePlanner.GraphQL.Common;
 using ConferencePlanner.GraphQL.Data;
 using HotChocolate;
 using HotChocolate.Subscriptions;
 using HotChocolate.Types;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConferencePlanner.GraphQL.Attendees
 {
@@ -18,12 +18,9 @@ namespace ConferencePlanner.GraphQL.Attendees
             [ScopedService] ApplicationDbContext context,
             CancellationToken cancellationToken)
         {
-            var attendee = new Attendee
+            Attendee attendee = new Attendee
             {
-                FirstName = input.FirstName,
-                LastName = input.LastName,
-                UserName = input.UserName,
-                EmailAddress = input.EmailAddress
+                FirstName = input.FirstName, LastName = input.LastName, UserName = input.UserName, EmailAddress = input.EmailAddress,
             };
 
             context.Attendees.Add(attendee);
@@ -40,7 +37,7 @@ namespace ConferencePlanner.GraphQL.Attendees
             [Service] ITopicEventSender eventSender,
             CancellationToken cancellationToken)
         {
-            var attendee = await context.Attendees.FirstOrDefaultAsync(
+            Attendee? attendee = await context.Attendees.FirstOrDefaultAsync(
                 t => t.Id == input.AttendeeId, cancellationToken);
 
             if (attendee is null)
@@ -52,7 +49,7 @@ namespace ConferencePlanner.GraphQL.Attendees
             attendee.SessionsAttendees.Add(
                 new SessionAttendee
                 {
-                    SessionId = input.SessionId
+                    SessionId = input.SessionId,
                 });
 
             await context.SaveChangesAsync(cancellationToken);

@@ -29,17 +29,16 @@ namespace ConferencePlanner.GraphQL.Sessions
                     new UserError("No speaker assigned.", "NO_SPEAKER"));
             }
 
-            var session = new Session
+            Session session = new Session
             {
-                Title = input.Title,
-                Abstract = input.Abstract,
+                Title = input.Title, Abstract = input.Abstract,
             };
 
             foreach (int speakerId in input.SpeakerIds)
             {
                 session.SessionSpeakers.Add(new SessionSpeaker
                 {
-                    SpeakerId = speakerId
+                    SpeakerId = speakerId,
                 });
             }
 
@@ -53,7 +52,7 @@ namespace ConferencePlanner.GraphQL.Sessions
         public async Task<ScheduleSessionPayload> ScheduleSessionAsync(
             ScheduleSessionInput input,
             [ScopedService] ApplicationDbContext context,
-            [Service]ITopicEventSender eventSender)
+            [Service] ITopicEventSender eventSender)
         {
             if (input.EndTime < input.StartTime)
             {
@@ -61,7 +60,7 @@ namespace ConferencePlanner.GraphQL.Sessions
                     new UserError("endTime has to be larger than startTime.", "END_TIME_INVALID"));
             }
 
-            var session = await context.Sessions.FindAsync(input.SessionId);
+            Session? session = await context.Sessions.FindAsync(input.SessionId);
 
             if (session is null)
             {
@@ -86,9 +85,9 @@ namespace ConferencePlanner.GraphQL.Sessions
         public async Task<RenameSessionPayload> RenameSessionAsync(
             RenameSessionInput input,
             [ScopedService] ApplicationDbContext context,
-            [Service]ITopicEventSender eventSender)
+            [Service] ITopicEventSender eventSender)
         {
-            var session = await context.Sessions.FindAsync(input.SessionId);
+            Session? session = await context.Sessions.FindAsync(input.SessionId);
 
             if (session is null)
             {

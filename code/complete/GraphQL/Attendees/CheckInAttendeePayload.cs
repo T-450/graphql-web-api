@@ -11,15 +11,13 @@ namespace ConferencePlanner.GraphQL.Attendees
         private readonly int? _sessionId;
 
         public CheckInAttendeePayload(Attendee attendee, int sessionId)
-            : base(attendee)
-        {
-            _sessionId = sessionId;
-        }
+            : base(attendee) => _sessionId = sessionId;
 
         public CheckInAttendeePayload(UserError error)
-            : base(new[] { error })
-        {
-        }
+            : base(new[]
+            {
+                error,
+            }) { }
 
         public async Task<Session?> GetSessionAsync(
             SessionByIdDataLoader sessionById,

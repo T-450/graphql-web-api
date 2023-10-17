@@ -1,4 +1,5 @@
 using HotChocolate.Types;
+using HotChocolate.Types.Descriptors.Definitions;
 
 namespace ConferencePlanner.GraphQL
 {
@@ -9,7 +10,7 @@ namespace ConferencePlanner.GraphQL
         {
             // TODO : we need a better API for the user.
             descriptor.Extend().Definition.ResultConverters.Add(
-                new((_, result) =>
+                new ResultConverterDefinition((_, result) =>
                 {
                     if (result is string s)
                     {
